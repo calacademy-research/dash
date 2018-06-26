@@ -1,9 +1,11 @@
-from flask import Flask
-from flask import render_template, request
+import os
 import sys
 
-sys.path.append('/Users/dash/Documents/dash/genomics-ansible/')
-import install_packages
+from flask import Flask
+from flask import render_template, request
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../genomics-ansible"))
+import yaml_backend
 
 app = Flask(__name__)
 
@@ -19,7 +21,7 @@ def available_packages():
     if request.method == 'POST':
         print(request.form.getlist('package_checkbox'))
 
-    packages = install_packages.load_packages("/Users/dash/Documents/dash/genomics-ansible/role_definitions")
+    packages = yaml_backend.load_packages("/Users/dash/Documents/dash/genomics-ansible/role_definitions")
     return render_template('package_list.html', packages=packages)
 
 
