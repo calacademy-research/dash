@@ -1,0 +1,3 @@
+[submodule "genomics-ansible"]
+	path = genomics-ansible
+	url = https://github.com/calacademy-research/genomics-ansible.git
