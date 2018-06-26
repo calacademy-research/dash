@@ -18,10 +18,15 @@ def index():
 
 @app.route('/available-packages', methods=['GET', 'POST'])
 def available_packages():
-    if request.method == 'POST':
-        print(request.form.getlist('package_checkbox'))
-
     packages = yaml_backend.load_packages("/Users/dash/Documents/dash/genomics-ansible/role_definitions")
+
+    if request.method == 'POST':
+        selected_packages = request.form.getlist('package_checkbox')
+        username = request.form.getlist('username')
+        server_address = request.form.getlist('server_ip')
+        for package in selected_packages:
+            install_package.install_package(packages, package, username, server_address)
+
     return render_template('package_list.html', packages=packages)
 
 
