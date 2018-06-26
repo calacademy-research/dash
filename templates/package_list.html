@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+<div align="center">
+    <h1>List of Packages:</h1>
+</div>
+
+<form method="post">
+    <div align="center">
+        <input type="submit" value="Install selected packages">
+    </div>
+    <br>
+    <table align="center" id="t01">
+        <tr>
+            <th style="width: 1%" >Install?</th>
+            <th>Package</th>
+            <th>Version</th>
+        </tr>
+        {% for package in packages %}
+            <tr>
+                <td style="text-align: center;"><input type="checkbox" name="package_checkbox" value="{{ packages[package]['role_name'] }}"></td>
+                <td>{{ packages[package]['role_name'] }}</td>
+                <td>{{ packages[package]['version'] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</form>
+</body>
+</html>
