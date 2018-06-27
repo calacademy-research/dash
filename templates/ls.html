@@ -1,0 +1,45 @@
+hello ls world! 2.0
+
+<script type=text/javascript src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script type=text/javascript src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
+
+<script>
+
+function runOnServer() {
+    var socket = io.connect('http://' + document.domain + ':' + location.port,
+        {rememberTransport: false});
+    // socket.on('connect', function () {
+    //     socket.emit('my event', {data: 'I\'m connected!'});
+    // });
+
+
+    // 05Jul2017 run_progress_content div has class whitespace: pre-wrap
+    // so we don't need to add the <br>.
+    socket.on('run_log', function (string) {
+        console.log(string);
+        $("#run_progress_content").append(string /* + "<br>" */);
+
+        //var $scrollTarget = $("#run_progress"); //.parent(); neither worked
+        //$scrollTarget.scrollTop($scrollTarget.height()); // this isn't working
+    });
+}
+
+function doLs() {
+    $.ajax({
+        type: "GET",
+        url: "http://127.0.0.1:5000/ls-program",
+        dataType: "text"
+       
+    });
+}
+
+runOnServer()
+
+</script>
+
+<span id="run_progress_content">
+
+</span>
+
+<button onclick="doLs();">click me</button>
