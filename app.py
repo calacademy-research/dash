@@ -1,21 +1,18 @@
 import os
-import sys
-import socketio
-import subprocess
-from flask_socketio import SocketIO
 import string
+import subprocess
+import sys
 
-
-
+import socketio
 from flask import Flask
 from flask import render_template, request
+from flask_socketio import SocketIO
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "genomics-ansible"))
 import yaml_backend
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-
 
 
 @app.route('/')
@@ -33,7 +30,7 @@ def available_packages():
         username = request.form.getlist('username')
         server_address = request.form.getlist('server_ip')
         for package in selected_packages:
-            install_package.install_package(packages, package, username, server_address)
+            pass
 
     return render_template('package_list.html', packages=packages)
 
@@ -47,9 +44,9 @@ def send_server(run_string):
         socketio.emit('run_log', no_errors)
     print("Emmtted:" + no_errors)
 
-def run_process(arg_array, directory=None,  server_echo=False):
-    global socketio
 
+def run_process(arg_array, directory=None, server_echo=False):
+    global socketio
 
     bin = arg_array[0]
     if socketio is not None:
@@ -60,7 +57,8 @@ def run_process(arg_array, directory=None,  server_echo=False):
         if directory is None:
             p = subprocess.Popen(arg_array, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
         else:
-            p = subprocess.Popen(arg_array, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=directory, universal_newlines=True)
+            p = subprocess.Popen(arg_array, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=directory,
+                                 universal_newlines=True)
 
         results = ""
         stdout_lines = iter(p.stdout.readline, "")
@@ -81,18 +79,15 @@ def run_process(arg_array, directory=None,  server_echo=False):
     return results
 
 
-
 @app.route('/ls-template', methods=['GET'])
 def ls_template():
-
     return render_template('/ls.html')
+
 
 @app.route('/ls-program', methods=['GET'])
 def ls_program():
-    run_process(['ls'],None, True)
+    run_process(['yes'], None, True)
     return "done", 200
-
-
 
 
 if __name__ == '__main__':
