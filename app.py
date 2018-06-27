@@ -27,10 +27,11 @@ def available_packages():
 
     if request.method == 'POST':
         selected_packages = request.form.getlist('package_checkbox')
-        username = request.form.getlist('username')
-        server_address = request.form.getlist('server_ip')
-        for package in selected_packages:
-            pass
+        # username = request.form.getlist('username')
+        # server_address = request.form.getlist('server_ip')
+        # for package in selected_packages:
+        #     pass
+        print(selected_packages)
 
     return render_template('package_list.html', packages=packages)
 
