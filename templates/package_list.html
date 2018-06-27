@@ -2,38 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Packages</title>
     <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#t01').DataTable({
+                "order": [[1, "asc"]],
+                "paging": false,
+                "info": false,
+                "bSortClasses": false,
+                "columnDefs": [
+                    {"width": "1%", "targets": 0},
+                    {"orderable": false, "targets": 2}
+                ]
+            });
+        });
+    </script>
 
 </head>
 <body>
 <div align="center">
-    <h1>List of Packages:</h1>
+    <h1>List of Packages</h1>
 </div>
 
 <form method="post">
-    <div align="center">
-        Username:<br>
-        <input type="text" name="username"><br>
-        Server IP:<br>
-        <input type="text" name="server_ip"><br>
+    <div id="user-input" align="center">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+
+        <label for="server_ip">Server IP</label>
+        <input type="text" id="server_ip" name="server_ip">
+
         <input type="submit" value="Install selected packages">
     </div>
     <br>
-    <table align="center" id="t01">
-        <tr>
-            <th style="width: 1%" >Install?</th>
-            <th>Package</th>
-            <th>Version</th>
-        </tr>
-        {% for package in packages %}
+    <div class="center_div">
+        <table id="t01" class="display cell-border">
+            <thead>
             <tr>
-                <td style="text-align: center;"><input type="checkbox" name="package_checkbox" value="{{ packages[package]['role_name'] }}"></td>
-                <td>{{ packages[package]['role_name'] }}</td>
-                <td>{{ packages[package]['version'] }}</td>
+                <th>Install?</th>
+                <th>Package</th>
+                <th>Version</th>
             </tr>
-        {% endfor %}
-    </table>
+            </thead>
+            <tbody>
+            {% for package in packages %}
+                <tr>
+                    <td style="text-align: center;"><input type="checkbox" name="package_checkbox"
+                                                           value="{{ packages[package]['role_name'] }}"></td>
+                    <td>{{ packages[package]['role_name'] }}</td>
+                    <td>{{ packages[package]['version'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </form>
 </body>
 </html>
