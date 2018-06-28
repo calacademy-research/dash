@@ -39,10 +39,10 @@ def available_packages():
 def send_server(run_string):
     global socketio
     print(run_string)
-    printable = set(string.printable)
-    no_errors = filter(lambda x: x in printable, run_string)
+    no_errors = ''.join(filter(lambda x: x in string.printable, run_string))
     if socketio is not None:
         socketio.emit('run_log', no_errors)
+
     print("Emmtted:" + no_errors)
 
 
@@ -87,7 +87,7 @@ def ls_template():
 
 @app.route('/ls-program', methods=['GET'])
 def ls_program():
-    run_process(['yes'], None, True)
+    run_process(['ls'], None, True)
     return "done", 200
 
 
