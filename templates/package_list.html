@@ -14,17 +14,45 @@
 
     <script>
         $(document).ready(function () {
-            $('#t01').DataTable({
+            let otable = $('#t01').DataTable({
                 "order": [[1, "asc"]],
                 "paging": false,
                 "info": false,
                 "bSortClasses": false,
                 "columnDefs": [
                     {"width": "1%", "targets": 0},
-                    {"orderable": false, "targets": 2}
-                ]
+                    {"orderable": false, "targets": [0, 2, 4]},
+                    {"visible": false, "targets": 3}
+
+                ],
+                "rowCallback": function (row, data) {
+                    if (data[3] == "True") {
+                        $('td', row).css('background-color', 'Pink');
+                    }
+                }
             });
+
+            // Hide root_install packages by default
+            otable.column(3).search("False").draw();
+
+
         });
+
+        function filtercheckbox() {
+            var otable = $('#t01').DataTable();
+            const checkBox = document.getElementById("root_installs");
+            let filtertext = "False";
+
+            if (checkBox.checked == true) {
+                filtertext = "";
+                otable.column(3).visible(true);
+            } else {
+                otable.column(3).visible(false)
+            }
+
+            // Run the filter only on column 3
+            otable.column(3).search(filtertext).draw();
+        }
     </script>
 
 </head>
@@ -43,6 +71,9 @@
 
         <input type="submit" value="Install selected packages">
     </div>
+
+    <input onchange="filtercheckbox()" type="checkbox" name="root_installs" id="root_installs" value="show_root">
+
     <br>
     <div class="center_div">
         <table id="t01" class="display cell-border">
@@ -51,6 +82,8 @@
                 <th>Install?</th>
                 <th>Package</th>
                 <th>Version</th>
+                <th>Requires Root</th>
+                <th>Short Description</th>
             </tr>
             </thead>
             <tbody>
@@ -60,6 +93,12 @@
                                                            value="{{ packages[package]['role_name'] }}"></td>
                     <td>{{ packages[package]['role_name'] }}</td>
                     <td>{{ packages[package]['version'] }}</td>
+                    <td>{{ packages[package]['requires_root'] }}</td>
+                    {% if packages[package]['short_description'] %}
+                        <td>{{ packages[package]['short_description'] }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
