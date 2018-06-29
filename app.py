@@ -5,15 +5,18 @@ import sys
 
 import socketio
 from flask import Flask
-from flask import render_template, request
+from flask import render_template, request, redirect, flash
 from flask_socketio import SocketIO
+from werkzeug.utils import secure_filename
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "genomics-ansible"))
 import yaml_backend
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.config['UPLOAD_FOLDER'] = 'uploads/'
 
+app.config['SECRET_KEY'] = 'hi'
 
 @app.route('/')
 @app.route('/index')
@@ -89,6 +92,17 @@ def ls_template():
 def ls_program():
     run_process(['ls'], None, True)
     return "done", 200
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+
+        f = request.files['file']
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return "Upload Successful"
+    return render_template('/upload.html')
 
 
 if __name__ == '__main__':
