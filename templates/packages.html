@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Packages</title>
+
+    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+
+    <script type="text/javascript" language="JavaScript" src="{{ url_for('static', filename='js/form.js') }}"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let otable = $('#t01').DataTable({
+                "order": [[1, "asc"]],
+                "paging": false,
+                "info": false,
+                "bSortClasses": false,
+                "columnDefs": [
+                    {"width": "1%", "targets": 0},
+                    {"orderable": false, "targets": [0, 2, 4]},
+                    {"visible": false, "targets": 3}
+
+                ],
+                // Highlight root-user install packages with pink
+                "rowCallback": function (row, data) {
+                    if (data[3] == "True") {
+                        $('td', row).css('background-color', 'Pink');
+                    }
+                }
+            });
+
+            // Define new searchbox
+            $("#searchbox").on("keyup search input paste cut", function () {
+                otable.search(this.value).draw();
+            });
+
+            // Hide root_install packages by default
+            otable.column(3).search("False").draw();
+        });
+
+        function filtercheckbox() {
+            var otable = $('#t01').DataTable();
+            const checkBox = document.getElementById("root_installs");
+            let filtertext = "False";
+
+            if (checkBox.checked == true) {
+                filtertext = "";
+                otable.column(3).visible(true);
+            } else {
+                otable.column(3).visible(false)
+            }
+
+            // Run the filter only on column 3
+            otable.column(3).search(filtertext).draw();
+        }
+        
+
+    </script>
+</head>
+<body>
+<div class="center_div">
+    <h1>List of Packages</h1>
+
+    <form method="post" enctype=multipart/form-data>
+        <div>
+            <p id="error_messages"></p>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username">
+
+            <label for="server_ip">Server IP</label>
+            <input type="text" id="server_ip" name="server_ip">
+
+            <input type=file name=file>
+            {#            <input class="blue_button" type=submit value="Upload server key">#}
+
+            <input type="submit" id="install_packages" value="Install selected packages" class="green_button">
+
+            <div>
+                <label for="root_installs"><i>Show root-level packages (Danger)</i></label>
+                <input onchange="filtercheckbox()" type="checkbox" name="root_installs" id="root_installs"
+                       value="show_root">
+
+                <input type="text" id="searchbox" class="pull-right" placeholder="Search">
+
+            </div>
+
+            <table id="t01" class="display cell-border">
+                <thead>
+                <tr>
+                    <th>Install?</th>
+                    <th>Package</th>
+                    <th>Version</th>
+                    <th>Requires Root</th>
+                    <th>Short Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for package in packages %}
+                    <tr>
+                        <td style="text-align: center;"><input type="checkbox" name="package_checkbox"
+                                                               value="{{ packages[package]['role_name'] }}"></td>
+                        <td>{{ packages[package]['role_name'] }}</td>
+                        <td>{{ packages[package]['version'] }}</td>
+                        <td>{{ packages[package]['requires_root'] }}</td>
+                        {% if packages[package]['short_description'] %}
+                            <td>{{ packages[package]['short_description'] }}</td>
+                        {% else %}
+                            <td>-</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+</body>
+</html>

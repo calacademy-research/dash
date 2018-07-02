@@ -5,7 +5,7 @@ import sys
 
 import socketio
 from flask import Flask
-from flask import render_template, request, redirect, flash
+from flask import render_template, request
 from flask_socketio import SocketIO
 from werkzeug.utils import secure_filename
 
@@ -18,6 +18,7 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 app.config['SECRET_KEY'] = 'hi'
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -29,14 +30,23 @@ def available_packages():
     packages = yaml_backend.load_packages(os.path.join(os.path.dirname(__file__), "genomics-ansible/role_definitions"))
 
     if request.method == 'POST':
+
         selected_packages = request.form.getlist('package_checkbox')
-        # username = request.form.getlist('username')
-        # server_address = request.form.getlist('server_ip')
+        username = request.form.getlist('username')
+        server_address = request.form.getlist('server_ip')
         # for package in selected_packages:
         #     pass
-        print(selected_packages)
 
-    return render_template('package_list.html', packages=packages)
+        # File upload
+
+        f = request.files['file']
+        if f.filename == '':
+            pass
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print(username, server_address, selected_packages, f)
+
+    return render_template('packages.html', packages=packages)
 
 
 def send_server(run_string):
@@ -97,7 +107,6 @@ def ls_program():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-
         f = request.files['file']
         filename = secure_filename(f.filename)
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))

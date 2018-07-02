@@ -1,0 +1,61 @@
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+/*h1 {*/
+/*text-align: center;*/
+/*}*/
+
+input[type=button], input[type=submit], input[type=reset] {
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    margin: 10px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font: 12px system-ui;
+}
+
+.green_button {
+    background-color: #4CAF50;
+}
+
+.blue_button {
+    background-color: #4CAEAE;
+}
+
+input[type=text] {
+    margin: 2px 2px;
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+.center_div {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+table {
+    white-space: normal;
+}
+
+body {
+    background-color: lightgrey;
+    font-family: system-ui;
+}
+
+/*Hide default datatables search bar*/
+.dataTables_filter {
+    display: none;
+}
+
+.pull-right {
+    float: right;
+}
+
+form {
+    display: inline-block;
+}
