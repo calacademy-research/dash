@@ -46,6 +46,8 @@ def available_packages():
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         print(username, server_address, selected_packages, f)
 
+        run_process(['ls'])
+
     return render_template('packages.html', packages=packages)
 
 
@@ -64,7 +66,7 @@ def run_process(arg_array, directory=None, server_echo=False):
 
     bin = arg_array[0]
     if socketio is not None:
-        send_server('running ' + bin + "\n")
+        send_server('running ' + bin + "<br>")
     # print("Executing script:" + arg_array)
     # pass universal_newlines=True so Carriage Return interpreted as newline
     try:
@@ -102,6 +104,10 @@ def ls_template():
 def ls_program():
     run_process(['ls'], None, True)
     return "done", 200
+
+@app.route('/terminal', methods=['GET'])
+def terminal():
+    return render_template('terminal_test.html')
 
 
 @app.route('/upload', methods=['GET', 'POST'])

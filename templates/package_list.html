@@ -57,12 +57,12 @@
 
 </head>
 <body>
-<div align="center">
+<div align="left" class="center_div">
     <h1>List of Packages</h1>
 </div>
 
 <form method="post">
-    <div id="user-input" align="center">
+    <div id="user-input" align="left" class="center_div">
         <label for="username">Username</label>
         <input type="text" id="username" name="username">
 
@@ -70,9 +70,11 @@
         <input type="text" id="server_ip" name="server_ip">
 
         <input type="submit" value="Install selected packages">
+
+        <input onchange="filtercheckbox()" type="checkbox" name="root_installs" id="root_installs" value="show_root">
     </div>
 
-    <input onchange="filtercheckbox()" type="checkbox" name="root_installs" id="root_installs" value="show_root">
+
 
     <br>
     <div class="center_div">

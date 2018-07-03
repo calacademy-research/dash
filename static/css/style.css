@@ -59,3 +59,23 @@ body {
 form {
     display: inline-block;
 }
+
+span.terminal {
+    font-family: Courier;
+}
+
+div.terminal {
+    background-color: #F5F5F5;
+    width: 50%;
+    height: 50%;
+    border: 1px solid #D1D1D1;
+    padding: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    overflow-y: auto;
+}
+
+body.terminal {
+    background-color: white;
+}
