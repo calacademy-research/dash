@@ -78,7 +78,7 @@
         function getTextFromServer() {
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:5000/install-packages",
+                url: "http://127.0.0.1:5000/ls-program",
                 dataType: "text"
 
             });
@@ -107,7 +107,7 @@
         <label for="server_ip">Server IP</label>
         <input type="text" id="server_ip" name="server_ip">
 
-        <input type="submit" value="Install selected packages" onclick="getTextFromServer()">
+        <input type="submit" value="Install selected packages">
         <br>
         <span id="run_progress_content"></span>
 
