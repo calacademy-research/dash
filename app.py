@@ -54,14 +54,6 @@ def available_packages():
     return render_template('packages.html', packages=packages)
 
 
-@app.route('/install-packages', methods=['GET'])
-def install_packages():
-
-    for package in selected_packages:
-        backend_install.install_package(packages, package, username, verbose=True)
-    return "done", 200
-
-
 def send_server(run_string):
     global socketio
     print(run_string)
