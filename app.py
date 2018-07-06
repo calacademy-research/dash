@@ -20,14 +20,9 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['SECRET_KEY'] = 'hi'
 
 
-# @app.route('/')
-# @app.route('/index')
-# def index():
-#     return render_template('index.html', d_word="Dumb")
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
-@app.route('/available-packages', methods=['GET', 'POST'])
 def available_packages():
     global packages
     global username
