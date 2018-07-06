@@ -22,7 +22,6 @@ app.config['SECRET_KEY'] = 'hi'
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index')
 def available_packages():
     global packages
     global username
