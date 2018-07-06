@@ -53,7 +53,7 @@ def available_packages():
     return render_template('packages.html', packages=packages)
 
 
-@app.route('/install-packages', methods='GET')
+@app.route('/install-packages', methods=['GET'])
 def install_packages():
 
     for package in selected_packages:
