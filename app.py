@@ -15,7 +15,7 @@ import backend_install
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['UPLOAD_FOLDER'] =  os.path.join(os.getcwd(),'uploads')
 
 app.config['SECRET_KEY'] = 'hi'
 
@@ -120,6 +120,9 @@ def upload_file():
 
 if __name__ == '__main__':
     # global socketio
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     socketio = SocketIO(app, async_mode="threading")
     socketio.run(app, debug=True, use_reloader=False)
+
     # app.run()
