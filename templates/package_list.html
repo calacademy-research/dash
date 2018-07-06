@@ -55,6 +55,44 @@
         }
     </script>
 
+    <script>
+        function runOnServer() {
+            var socket = io.connect('http://127.0.0.1:5000',
+                {rememberTransport: false});
+            // socket.on('connect', function () {
+            //     socket.emit('my event', {data: 'I\'m connected!'});
+            // });
+
+
+            // 05Jul2017 run_progress_content div has class whitespace: pre-wrap
+            // so we don't need to add the <br>.
+            socket.on('run_log', function (string) {
+                console.log(string);
+                $("#run_progress_content").append(string + "<br>");
+
+                //var $scrollTarget = $("#run_progress"); //.parent(); neither worked
+                //$scrollTarget.scrollTop($scrollTarget.height()); // this isn't working
+            });
+        }
+
+        function getTextFromServer() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:5000/install-packages",
+                dataType: "text"
+
+            });
+        }
+
+        runOnServer()
+    </script>
+
+    <script>
+        function openTerminal() {
+            window.open("google.com")
+        }
+    </script>
+
 </head>
 <body>
 <div align="left" class="center_div">
@@ -69,11 +107,12 @@
         <label for="server_ip">Server IP</label>
         <input type="text" id="server_ip" name="server_ip">
 
-        <input type="submit" value="Install selected packages">
+        <input type="submit" value="Install selected packages" onclick="getTextFromServer()">
+        <br>
+        <span id="run_progress_content"></span>
 
         <input onchange="filtercheckbox()" type="checkbox" name="root_installs" id="root_installs" value="show_root">
     </div>
-
 
 
     <br>

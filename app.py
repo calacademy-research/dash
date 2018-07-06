@@ -10,7 +10,8 @@ from flask_socketio import SocketIO
 from werkzeug.utils import secure_filename
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "genomics-ansible"))
-import yaml_backend
+import yaml_common
+import backend_install
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -27,15 +28,18 @@ def index():
 
 @app.route('/available-packages', methods=['GET', 'POST'])
 def available_packages():
-    packages = yaml_backend.load_packages(os.path.join(os.path.dirname(__file__), "genomics-ansible/role_definitions"))
+    global packages
+    global username
+    global server_address
+    global selected_packages
+
+    packages = yaml_common.load_packages(os.path.join(os.path.dirname(__file__), "genomics-ansible/role_definitions"))
 
     if request.method == 'POST':
 
         selected_packages = request.form.getlist('package_checkbox')
-        username = request.form.getlist('username')
-        server_address = request.form.getlist('server_ip')
-        # for package in selected_packages:
-        #     pass
+        username = request.form['username']
+        server_address = request.form['server_ip']
 
         # File upload
 
@@ -46,9 +50,15 @@ def available_packages():
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         print(username, server_address, selected_packages, f)
 
-        run_process(['ls'])
-
     return render_template('packages.html', packages=packages)
+
+
+@app.route('/install-packages', methods='GET')
+def install_packages():
+
+    for package in selected_packages:
+        backend_install.install_package(packages, package, username, verbose=True)
+    return "done", 200
 
 
 def send_server(run_string):
@@ -105,6 +115,7 @@ def ls_program():
     run_process(['ls'], None, True)
     return "done", 200
 
+
 @app.route('/terminal', methods=['GET'])
 def terminal():
     return render_template('terminal_test.html')
@@ -121,7 +132,7 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    global socketio
+    # global socketio
     socketio = SocketIO(app, async_mode="threading")
     socketio.run(app, debug=True, use_reloader=False)
     # app.run()
